@@ -10,12 +10,15 @@
 (setq request-log-level -1)
 (setq request-message-level -1)
 
-(defvar echange/session-id nil "Session Id used to perform calls. Can be obtained from logon method")
-(defvar echange/url "http://localhost:5000" "URL for the service")
-(defvar echange/calendar-file nil "")
-(defvar echange/exchange-base-url nil "")
+(defvar echange/calendar-file nil "Path to save calendar org file")
+(defvar echange/exchange-base-url nil "Base URL of Exchange EWS server. Used to form email's full URL if it is requested to open email message in browser instead of Outlook")
 (defvar echange/server-path nil "Http server executable path")
 (defvar echange/server-port "5000" "Http server port")
+
+(defvar echange/--session-id nil "Session id used to perform calls to echange http server. Obtained from logon method")
+
+(defun echange/--url ()
+    (format "http://localhost:%s" echange/server-port))
 
 (defun echange/--proc-filter (process text on-start)
   (when (string-match "Started server on port" text)
@@ -66,17 +69,17 @@
 
 ;;;###autoload
 (defun echange/--reset-session ()
-  (setq echange/session-id nil))
+  (setq echange/--session-id nil))
 
 ;;;###autoload
 (defun echange/--set-session (session-id)
   (when (not session-id)
     (error "session-id must not be nil"))
-  (setq echange/session-id session-id))
+  (setq echange/--session-id session-id))
 
 ;;;###autoload
 (defun echange/--get-session ()
-  echange/session-id)
+  echange/--session-id)
 
 ;;;###autoload
 (defun echange/--parse-response (resp-alist)
@@ -100,7 +103,7 @@
 (defun echange/--logon (email password)
   (deferred:$
     (request-deferred
-     (concat echange/url "/logon")
+     (concat (echange/--url) "/logon")
      :type "POST"
      :headers '(("Content-Type" . "application/x-www-form-urlencoded"))
      :data (format "email=%s&password=%s" email password)
@@ -111,7 +114,7 @@
 (defun echange/--calendar2days (session-id)
   (deferred:$
     (request-deferred
-     (concat echange/url (format "/calendar2days?session-id=%s" session-id))
+     (concat (echange/--url) (format "/calendar2days?session-id=%s" session-id))
      :type "GET"
      :parser 'json-read)
     (deferred:nextc it 'echange/--on-success)))
@@ -123,7 +126,7 @@
          (data (format "session-id=%s&message-id=%s&folders=%s" session-id msg-id fs)))
     (deferred:$
       (request-deferred
-       (concat echange/url "/entry-id")
+       (concat (echange/--url) "/entry-id")
        :type "POST"
        :headers '(("Content-Type" . "application/x-www-form-urlencoded"))
        :data data
@@ -137,7 +140,7 @@
          (data (format "session-id=%s&message-id=%s&folders=%s" session-id msg-id fs)))
     (deferred:$
       (request-deferred
-       (concat echange/url "/message-url")
+       (concat (echange/--url) "/message-url")
        :type "POST"
        :headers '(("Content-Type" . "application/x-www-form-urlencoded"))
        :data data
@@ -237,7 +240,7 @@
         (deferred:nextc it
           (lambda ()
             (request-deferred
-             (concat echange/url "/logoff")
+             (concat (echange/--url) "/logoff")
              :type "POST"
              :headers '(("Content-Type" . "application/x-www-form-urlencoded"))
              :data (format "session-id=%s" sid)
