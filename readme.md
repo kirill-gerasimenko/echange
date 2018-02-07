@@ -1,6 +1,8 @@
-- [Add emacs part setup description](#sec-1)
+About:
 
-# TODO Add emacs part setup description<a id="sec-1"></a>
+Emacs package that provides abilities to open Microsoft Exchange emails from org-mode captured links and adds events for today's and tomorrow's upcoming events to org-agenda.
+
+Outlook setup:
 
 In Microsoft Outlook create the following macro:
 
