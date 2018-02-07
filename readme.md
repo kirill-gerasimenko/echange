@@ -1,8 +1,11 @@
-About:
+- [About](#sec-1)
+- [Outlook setup](#sec-2)
+
+# About<a id="sec-1"></a>
 
 Emacs package that provides abilities to open Microsoft Exchange emails from org-mode captured links and adds events for today's and tomorrow's upcoming events to org-agenda.
 
-Outlook setup:
+# Outlook setup<a id="sec-2"></a>
 
 In Microsoft Outlook create the following macro:
 
