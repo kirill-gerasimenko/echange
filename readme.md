@@ -7,7 +7,7 @@ Emacs package that provides abilities to open Microsoft Exchange emails from org
 
 In Microsoft Outlook create the following macro:
 
-```
+```vba
 Sub CopyLinkToClipboard()
    Dim objMail As Outlook.MailItem
    Dim doClipboard As New DataObject

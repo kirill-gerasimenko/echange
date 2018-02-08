@@ -7,7 +7,7 @@
 * Outlook setup
   In Microsoft Outlook create the following macro:
 
-  #+BEGIN_SRC
+  #+BEGIN_SRC vba
   Sub CopyLinkToClipboard()
      Dim objMail As Outlook.MailItem
      Dim doClipboard As New DataObject
