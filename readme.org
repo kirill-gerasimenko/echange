@@ -33,31 +33,40 @@
   I've added a button for the macro to Outlook's ribbon and automatically it got
   hotkey (in my case ~Alt-3~).
 * Emacs setup
-  #+BEGIN_SRC elisp
-    (require 'echange)
+** Mandatory common settings
+   #+BEGIN_SRC elisp
+     (require 'echange)
 
-    ;; path of the file to save calendar data to
-    (setq echange/calendar-file "d:/org/calendar.org")
+     ;; path to the echange.bat file wich starts Clojure http server to access Exchange via EWS
+     (setq echange/server-path "./echange.bat")
 
-    ;; base URL of the exchange server OWA (for opening email messages in the browser)
-    (setq echange/exchange-base-url "https://some.exchange.server.com/owa")
+     ;; Clojure http server port
+     (setq echange/server-port "5000")
 
-    ;; path to the echange.bat file wich starts Clojure http server to access Exchange via EWS
-    (setq echange/server-path "./echange.bat")
+     ;; Exchange folders used to search email messages
+     (setq echagne/exchange-dirs ["Archive" "Inbox" "Spam" "Project1"])
+   #+END_SRC
+** Opening email links in Outlook/browser
+   #+BEGIN_SRC elisp
+     ;; base URL of the exchange server OWA (for opening email messages in the browser)
+     ;; if links are opened in Outlook - this setting can be omitted
+     (setq echange/exchange-base-url "https://some.exchange.server.com/owa")
 
-    ;; Clojure http server port
-    (setq echange/server-port "5000")
+     ;; Pass t as last parameter to make email messages open in browser
+     (defun org-outlook-open-in-browser (id)
+       (echange/open-in-outlook id t))
 
-    ;; Exchange folders used to search email messages
-    (setq echagne/exchange-dirs ["Archive" "Inbox" "Spam" "Project1"])
+     ;; Register 'outlook' link type for org-mode to open messages in browser
+     (org-add-link-type "outlook" 'org-outlook-open-in-browser)
 
-    ;; Pass t as last parameter to make email messages open in browser
-    (defun org-outlook-open (id)
-      (echange/open-in-outlook id t))
-
-    ;; Register 'outlook' link type for org-mode
-    (org-add-link-type "outlook" 'org-outlook-open)
-  #+END_SRC
+     ;; Register 'outlook' link type for org-mode to open messages in Outlook
+     (org-add-link-type "outlook" 'echange/open-in-outlook)
+   #+END_SRC
+** Getting 2 days calendar
+   #+BEGIN_SRC elisp
+     ;; path of the file to save calendar data to
+     (setq echange/calendar-file "d:/calendar.org")
+   #+END_SRC
 * Building http server
   Http server that accesses Exchange via EWS is written in Clojure. 
   In order to build it from sources one needs to have [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java]] (it was tested with version 8) and [[https://leiningen.org/][Leiningen]].
