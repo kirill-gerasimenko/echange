@@ -183,7 +183,7 @@
         (deferred:succeed sid)))))
 
 ;;;###autoload
-(defun echange/open-in-outlook (message-id &optional in-browser)
+(defun echange/open-message (message-id &optional in-browser)
   (interactive)
   (lexical-let ((message-id message-id) ; for some reason variables didn't get closed over in lambda below
                 (in-browser in-browser)); lexical-let is the only way I've found this to work for now
