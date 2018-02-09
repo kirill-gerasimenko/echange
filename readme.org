@@ -58,6 +58,18 @@
     ;; Register 'outlook' link type for org-mode
     (org-add-link-type "outlook" 'org-outlook-open)
   #+END_SRC
+* Building http server
+  Http server that accesses Exchange via EWS is written in Clojure. 
+  In order to build it from sources one needs to have [[http://www.oracle.com/technetwork/java/javase/downloads/index.html][Java]] (it was tested with version 8) and [[https://leiningen.org/][Leiningen]].
+  
+  Once these are installed run in root of the projects folder:
+  
+  #+BEGIN_SRC cmd
+    c:\echange> lein deps
+    c:\echange> lein ring uberjar
+  #+END_SRC
+  
+  This should produce server JAR files in ~./target/~ folder.
 * How it works
   The link captured with VBA macro above contains internet message id of the
   email message. This way message is uniquely identitied and this id doesn't
