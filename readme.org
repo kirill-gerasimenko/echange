@@ -3,7 +3,6 @@
   Emacs package that provides abilities to open Microsoft Exchange emails
   from org-mode captured links and adds events for today's and tomorrow's upcoming
   events to ~org-agenda~.
-  
 * Outlook setup
   In Microsoft Outlook create the following macro:
 
@@ -49,10 +48,12 @@
     ;; Clojure http server port
     (setq echange/server-port "5000")
 
-    ;; IMPORTANT: enumerate folders as they are in Exchange as a parameter to
-    ;; echange/open-in-outlook function - they'll be used to lookup email message by it's internet id
+    ;; Exchange folders used to search email messages
+    (setq echagne/exchange-dirs ["Archive" "Inbox" "Spam" "Project1"])
+
+    ;; Pass t as last parameter to make email messages open in browser
     (defun org-outlook-open (id)
-      (echange/open-in-outlook id ["Archive" "Inbox" "Spam" "Project1"] echange/in-browser))
+      (echange/open-in-outlook id t))
 
     ;; Register 'outlook' link type for org-mode
     (org-add-link-type "outlook" 'org-outlook-open)

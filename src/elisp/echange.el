@@ -14,6 +14,7 @@
 (defvar echange/exchange-base-url nil "Base URL of Exchange EWS server. Used to form email's full URL if it is requested to open email message in browser instead of Outlook")
 (defvar echange/server-path nil "Http server executable path")
 (defvar echange/server-port "5000" "Http server port")
+(defvar echagne/exchange-dirs [] "Exchange folders names to look for messages")
 
 (defvar echange/--session-id nil "Session id used to perform calls to echange http server. Obtained from logon method")
 
@@ -182,23 +183,22 @@
         (deferred:succeed sid)))))
 
 ;;;###autoload
-(defun echange/open-in-outlook (message-id folders &optional in-browser)
+(defun echange/open-in-outlook (message-id &optional in-browser)
   (interactive)
   (lexical-let ((message-id message-id) ; for some reason variables didn't get closed over in lambda below
-                (folders folders)       ; lexical-let is the only way I've found this to work for now
-                (in-browser in-browser))
+                (in-browser in-browser)); lexical-let is the only way I've found this to work for now
     (deferred:$
       (echange/logon)
       (deferred:nextc it
         (lambda (session-id)
           (if (not in-browser)
               (deferred:$
-                (echange/--entry-id session-id message-id folders)
+                (echange/--entry-id session-id message-id echagne/exchange-dirs)
                 (deferred:nextc it
                   (lambda (entry-id)
                     (w32-shell-execute "open" "outlook" (concat "outlook:" entry-id)))))
             (deferred:$
-              (echange/--message-url session-id message-id folders)
+              (echange/--message-url session-id message-id echagne/exchange-dirs)
               (deferred:nextc it
                 (lambda (message-url)
                   (let ((full-url (concat echange/exchange-base-url (url-encode-url message-url))))
