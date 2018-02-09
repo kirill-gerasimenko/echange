@@ -58,13 +58,13 @@ I've added a button for the macro to Outlook's ribbon and automatically it got h
 
 ;; Pass t as last parameter to make email messages open in browser
 (defun org-outlook-open-in-browser (id)
-  (echange/open-in-outlook id t))
+  (echange/open-message id t))
 
 ;; Register 'outlook' link type for org-mode to open messages in browser
 (org-add-link-type "outlook" 'org-outlook-open-in-browser)
 
 ;; Register 'outlook' link type for org-mode to open messages in Outlook
-(org-add-link-type "outlook" 'echange/open-in-outlook)
+(org-add-link-type "outlook" 'echange/open-message)
 ```
 
 ## Getting 2 days calendar
