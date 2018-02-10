@@ -7,7 +7,7 @@
 ;; Keywords: exchange ews outlook email messages mail calendar
 ;; URL: https://github.com/kirill-gerasimenko/echange
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "24.4"))
+;; Package-Requires: ((emacs "24.4") request deferred request-deferred dash)
 
 ;; This file is not part of GNU Emacs.
 
