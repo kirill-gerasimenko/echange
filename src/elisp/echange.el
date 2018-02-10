@@ -206,7 +206,27 @@
 
 ;;;###autoload
 (defun echange-open-message (message-id &optional in-browser)
+  "Finds and opens MS Exchange message identified by MESSAGE-ID.
+
+By default it opens found message in MS Outlook application, but if provided
+with optional not nil IN-BROWSER parameter - will open in default systems
+browser.
+
+Notes:
+
+If IN-BROSER is not nil echange-exchange-base-url variable should be set to base
+URL of the exchange server.
+
+The first time user will be asked for user name and password for accessing MS
+Exchange service (and experience slower reaction, but subsequent calls should be
+very fast).
+
+MESSAGE-ID is an internet message id of the message in format
+'<message-id@mail-server>'. Check echange home page at GitHub for details.
+"
   (interactive)
+  (when (and in-browser (not echange-exchange-base-url))
+    (error "echange-exchange-base-url must not be nil if trying to open message in browser"))
   (lexical-let ((message-id message-id) ; for some reason variables didn't get closed over in lambda below
                 (in-browser in-browser)); lexical-let is the only way I've found this to work for now
     (deferred:$
@@ -232,6 +252,7 @@
 
 ;;;###autoload
 (defun echange-calendar2days ()
+  ""
   (interactive)
   (deferred:$
     (echange--logon)
