@@ -1,3 +1,35 @@
+;;; echange.el --- Helpers to work with MS Exchange emails and calendar events
+
+;; Copyright (C) 2018 Kirill Gerasimenko
+
+;; Author: Kirill Gerasimenko <kirill-gerasimenko@users.noreply.github.com>
+;; Created: 10 Feb 2018
+;; Keywords: exchange ews outlook email messages
+;; Homepage: https://github.com/kirill-gerasimenko/echange
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Emacs package that provides abilities to open Microsoft Exchange emails
+;; from org-mode captured links and adds events for today's and tomorrow's
+;; upcoming events to org-agenda.
+
+;;; Code:
+
 (setq lexical-binding t)
 
 (require 'request)
@@ -12,9 +44,9 @@
 
 (defvar echange/calendar-file nil "Path to save calendar org file")
 (defvar echange/exchange-base-url nil "Base URL of Exchange EWS server. Used to form email's full URL if it is requested to open email message in browser instead of Outlook")
-(defvar echange/server-path nil "Http server executable path")
+(defvar echange/server-path "./echange.bat" "Http server executable path")
 (defvar echange/server-port "5000" "Http server port")
-(defvar echagne/exchange-dirs [] "Exchange folders names to look for messages")
+(defvar echagne/exchange-dirs ["Inbox" "Archive"] "Exchange folders names to look for messages")
 
 (defvar echange/--session-id nil "Session id used to perform calls to echange http server. Obtained from logon method")
 
@@ -249,6 +281,6 @@
           (-lambda ((&plist 'error error))
             (message "(ECHANGE) Error logging off: %S" error)))))))
 
-(echange/--reset-session)
-
 (provide 'echange)
+
+;;; echange.el ends here
