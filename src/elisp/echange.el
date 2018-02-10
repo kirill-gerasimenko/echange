@@ -127,7 +127,7 @@
           (deferred:succeed value))))
      ((not (= status-code 200)) (deferred:fail (request-response-error-thrown response))))))
 
-(defun echange--logon (email password)
+(defun echange--logon-request (email password)
   (deferred:$
     (request-deferred
      (concat (echange--url) "/logon")
@@ -171,8 +171,7 @@
        :parser 'json-read)
       (deferred:nextc it 'echange--on-success))))
 
-;;;###autoload
-(defun echange-logon ()
+(defun echange--logon ()
   (interactive)
   (let ((sid (echange--get-session)))
     (if (not sid)
@@ -185,7 +184,7 @@
                   (echange--ensure-http-service)
                   (deferred:nextc it
                     (lambda ()
-                      (echange--logon email password)))
+                      (echange--logon-request email password)))
                   (deferred:nextc it
                     (lambda (session-id)
                       (echange--set-session session-id)
@@ -211,7 +210,7 @@
   (lexical-let ((message-id message-id) ; for some reason variables didn't get closed over in lambda below
                 (in-browser in-browser)); lexical-let is the only way I've found this to work for now
     (deferred:$
-      (echange-logon)
+      (echange--logon)
       (deferred:nextc it
         (lambda (session-id)
           (if (not in-browser)
@@ -235,7 +234,7 @@
 (defun echange-calendar2days ()
   (interactive)
   (deferred:$
-    (echange-logon)
+    (echange--logon)
     (deferred:nextc it
       (lambda (session-id)
         (echange--calendar2days session-id)))
