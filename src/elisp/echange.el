@@ -2,10 +2,11 @@
 
 ;; Copyright (C) 2018 Kirill Gerasimenko
 
-;; Author: Kirill Gerasimenko <kirill-gerasimenko@users.noreply.github.com>
+;; Author: Kirill Gerasimenko <kirill.gerasimenko@internet-mail.org>
 ;; Created: 10 Feb 2018
 ;; Keywords: exchange ews outlook email messages
 ;; Homepage: https://github.com/kirill-gerasimenko/echange
+;; Version: 0.1.0
 
 ;; This file is not part of GNU Emacs.
 
