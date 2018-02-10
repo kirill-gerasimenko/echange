@@ -44,16 +44,16 @@
 (setq request-log-level -1)
 (setq request-message-level -1)
 
-(defvar echange-calendar-file nil "Path to save calendar org file")
-(defvar echange-exchange-base-url nil "Base URL of Exchange EWS server. Used to form email's full URL if it is requested to open email message in browser instead of Outlook")
-(defvar echange-server-path "./echange.bat" "Http server executable path")
-(defvar echange-server-port "5000" "Http server port")
-(defvar echange-exchange-dirs ["Inbox" "Archive"] "Exchange folders names to look for messages")
+(defvar echange-calendar-file nil "Path to save calendar org file.")
+(defvar echange-exchange-base-url nil "Base URL of Exchange EWS server. Used to form email's full URL if it is requested to open email message in browser instead of Outlook.")
+(defvar echange-server-path "./echange.bat" "Http server executable path.")
+(defvar echange-server-port "5000" "Http server port.")
+(defvar echange-exchange-dirs ["Inbox" "Archive"] "Exchange folders names to look for messages.")
 
-(defvar echange--session-id nil "Session id used to perform calls to echange http server. Obtained from logon method")
+(defvar echange--session-id nil "Session id used to perform calls to echange http server. Obtained from logon method.")
 
 (defun echange--url ()
-    (format "http://localhost:%s" echange-server-port))
+  (format "http://localhost:%s" echange-server-port))
 
 (defun echange--proc-filter (process text on-start)
   (when (string-match "Started server on port" text)
@@ -105,7 +105,7 @@
 
 (defun echange--set-session (session-id)
   (when (not session-id)
-    (error "session-id must not be nil"))
+    (error "Variable session-id must not be nil"))
   (setq echange--session-id session-id))
 
 (defun echange--get-session ()
@@ -218,11 +218,10 @@ If IN-BROSER is not nil echange-exchange-base-url variable should be set to base
 URL of the exchange server.
 
 MESSAGE-ID is an internet message id of the message in format
-'<message-id@mail-server>'. Check echange home page at GitHub for details.
-"
+'<message-id@mail-server>'. Check echange home page at GitHub for details."
   (interactive)
   (when (and in-browser (not echange-exchange-base-url))
-    (error "echange-exchange-base-url must not be nil if trying to open message in browser"))
+    (error "Variable echange-exchange-base-url must not be nil if trying to open message in browser"))
   (lexical-let ((message-id message-id) ; for some reason variables didn't get closed over in lambda below
                 (in-browser in-browser)); lexical-let is the only way I've found this to work for now
     (deferred:$
@@ -257,11 +256,10 @@ echange-calendar-file must be set to the file path where to save calendar data.
 
 To make it useful one might want to add produced file to
 org-agenda-files and set up timer to call this function
-periodically.
-"
+periodically."
   (interactive)
   (when (not echange-calendar-file)
-    (error "echange-calendar-file must not be nil"))
+    (error "Variable echange-calendar-file must not be nil"))
   (deferred:$
     (echange--logon)
     (deferred:nextc it
@@ -289,8 +287,7 @@ NOTE:
 
 Even if http server is not currently running - executing this function will
 clean up cached session id thus user will have to enter MS Exchange credentials
-when using other package's functions.
-"
+when using other package's functions."
   (interactive)
   (lexical-let ((sid (echange--get-session)))
     (when (and sid (not (equal sid :in-progress)))
