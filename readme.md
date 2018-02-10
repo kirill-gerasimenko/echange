@@ -3,6 +3,8 @@
 
 Emacs package that provides abilities to open Microsoft Exchange emails from org-mode captured links and adds events for today's and tomorrow's upcoming events to `org-agenda`.
 
+The package is developed and tested on Windows, but shortly I'll update it for Linux as well.
+
 # Outlook setup
 
 In Microsoft Outlook create the following macro:
