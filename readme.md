@@ -78,14 +78,7 @@ I've added a button for the macro to Outlook's ribbon and automatically it got h
 
 Http server that accesses Exchange via EWS is written in Clojure. In order to build it from sources one needs to have [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (it was tested with version 8) and [Leiningen](https://leiningen.org/).
 
-Once these are installed run in root of the projects folder:
-
-```cmd
-c:\echange> lein deps
-c:\echange> lein ring uberjar
-```
-
-This should produce server JAR files in `./target/` folder.
+Once these are installed run `build.cmd` in root of the projects folder. This should produce server JAR file and copy it along latest `echagne.el` to `bin` folder.
 
 # How it works
 
