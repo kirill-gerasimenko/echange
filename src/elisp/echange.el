@@ -212,14 +212,10 @@ By default it opens found message in MS Outlook application, but if provided
 with optional not nil IN-BROWSER parameter - will open in default systems
 browser.
 
-Notes:
+NOTE:
 
 If IN-BROSER is not nil echange-exchange-base-url variable should be set to base
 URL of the exchange server.
-
-The first time user will be asked for user name and password for accessing MS
-Exchange service (and experience slower reaction, but subsequent calls should be
-very fast).
 
 MESSAGE-ID is an internet message id of the message in format
 '<message-id@mail-server>'. Check echange home page at GitHub for details.
@@ -252,8 +248,20 @@ MESSAGE-ID is an internet message id of the message in format
 
 ;;;###autoload
 (defun echange-calendar2days ()
-  ""
+  "Gets calendar events from MS Exchange from now till tomorrow EOD and stores
+them in org file (which is specified in echange-calendar-file variable)
+
+NOTE:
+
+echange-calendar-file must be set to the file path where to save calendar data.
+
+To make it useful one might want to add produced file to
+org-agenda-files and set up timer to call this function
+periodically.
+"
   (interactive)
+  (when (not echange-calendar-file)
+    (error "echange-calendar-file must not be nil"))
   (deferred:$
     (echange--logon)
     (deferred:nextc it
@@ -274,6 +282,15 @@ MESSAGE-ID is an internet message id of the message in format
 
 ;;;###autoload
 (defun echange-logoff ()
+  "Utility function to log user off from http server which is used to access MS
+Exchange service.
+
+NOTE:
+
+Even if http server is not currently running - executing this function will
+clean up cached session id thus user will have to enter MS Exchange credentials
+when using other package's functions.
+"
   (interactive)
   (lexical-let ((sid (echange--get-session)))
     (when (and sid (not (equal sid :in-progress)))
