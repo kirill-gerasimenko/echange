@@ -81,7 +81,7 @@
 
 (defun echange--start-http-service ()
   (lexical-let ((d (deferred:new))
-                (p (start-process "echange-http-server" nil echange-server-path echange/server-port)))
+                (p (start-process "echange-http-server" nil echange-server-path echange-server-port)))
     (set-process-sentinel
      p
      (lambda (process status)
